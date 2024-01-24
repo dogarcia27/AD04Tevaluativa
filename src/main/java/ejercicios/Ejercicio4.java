@@ -14,33 +14,24 @@ public class Ejercicio4 {
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("ud4");
         EntityManager entityManager = factory.createEntityManager();
 		
-		try {			
+		System.out.println("Borrando un Student y en cascada sus elementos asociados");
+			
+		int student_id = 22;
+			
+		Student tempStudent = entityManager.find(Student.class, student_id);
+		// comienza la transacci�n
+		entityManager.getTransaction().begin();
 		
-			System.out.println("Borrando un Tuition y en cascada su Student asociado");
+		// borra el Student y con CascadeType.ALL termina borrando su Tuition
+		entityManager.remove(tempStudent);
 			
-			int student_id = 11;
-			
-			Student tempStudent = entityManager.find(Student.class, student_id);
-			// comienza la transacci�n
-			entityManager.getTransaction().begin();
-		
-			// borra el Student y con CascadeType.ALL termina borrando su Tuition
-			entityManager.remove(tempStudent);
-			
-			// hace commit de la transaccion
-			entityManager.getTransaction().commit();
+		// hace commit de la transaccion
+		entityManager.getTransaction().commit();
 					
-			System.out.println("Hecho!");
-		}
-		catch ( Exception e ) {
-			// rollback ante alguna excepci�n
-			System.out.println("Realizando Rollback");
-			entityManager.getTransaction().rollback();
-			e.printStackTrace();
-		}
-		finally {
-			entityManager.close();
-			factory.close();
-		}
+		System.out.println("Hecho!");
+	
+		entityManager.close();
+		factory.close();
+		
 	}
 }
